@@ -1,0 +1,35 @@
+
+# eulang for macOS (10.14.5)
+
+# This is NOT a script file, simply directions for Terminal
+
+# Without homebrew, you would have to put -DNO_FLOAT128 in as a defined macro, and use regular GCC.
+
+
+# Directions:
+
+# Install GCC from homebrew (https://brew.sh/)
+# In Terminal on macOS copy and paste:
+
+
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+
+brew install gcc
+
+
+# Find directory of "quadmath.h"
+# Use it in CPATH below
+# In Terminal on macOS copy and paste:
+
+
+export CPATH=/usr/local/Cellar/gcc/9.1.0/lib/gcc/9/gcc/x86_64-apple-darwin18/9.1.0/include
+gcc-9 -c -Wall -Werror -fpic -std=c99 -Dunix -DNO_INT128 data.c
+gcc-9 -shared -o libeulang.dylib data.o -lquadmath
+gcc-9 -L. -Wall -std=c99 -Dunix -DNO_INT128 -o eulang eulang.c -leulang
+export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
+./eulang
+
+
+# Done!
+# Should run "eulang"
